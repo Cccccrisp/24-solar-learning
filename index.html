@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24节气 · AI微专业成长地图</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f8f7f4; color: #2c2c2c; line-height: 1.75; overflow-x: hidden;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem;
+    background: linear-gradient(180deg, #f8f7f4 0%, #e8e6df 100%); position: relative;
+  }
+  .hero-badge { font-size: 0.75rem; letter-spacing: 0.35em; color: #888; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: 0.08em; color: #1a1a1a; margin-bottom: 1rem; }
+  .hero h2 { font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; color: #666; max-width: 600px; margin-bottom: 3rem; }
+  .hero-seasons { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+  .hero-season { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: transform 0.3s; }
+  .hero-shanghai { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+  .hero-shanghai:hover { transform: scale(1.15); }
+  .hero-spring { background: #d4edda; color: #2d6a4f; }
+  .hero-summer { background: #fde2d3; color: #d45d2c; }
+  .hero-autumn { background: #f5e6d3; color: #b87333; }
+  .hero-winter { background: #d6e4f0; color: #3a5a80; }
+  .scroll-hint { position: absolute; bottom: 2rem; font-size: 0.75rem; color: #aaa; letter-spacing: 0.2em; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+  /* ===== Season Cover ===== */
+  .season-cover {
+    position: relative; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 3rem 2rem; overflow: hidden;
+  }
+  .season-cover::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center; opacity: 0.12;
+  }
+  .cover-spring { background: linear-gradient(180deg, #d4edda 0%, #e8f0e4 60%, #f8f7f4 100%); }
+  .cover-spring::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Ccircle cx='80' cy='120' r='60' fill='%236ECF7A' opacity='0.3'/%3E%3Ccircle cx='200' cy='80' r='40' fill='%238FD694' opacity='0.2'/%3E%3Ccircle cx='320' cy='150' r='50' fill='%23B8D4E8' opacity='0.2'/%3E%3Cpath d='M0 180 Q100 120 200 180 Q300 240 400 180' stroke='%236ECF7A' stroke-width='2' fill='none' opacity='0.3'/%3E%3C/svg%3E"); }
+  .cover-summer { background: linear-gradient(180deg, #fde2d3 0%, #fef0e9 60%, #f8f7f4 100%); }
+  .cover-summer::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Ccircle cx='120' cy='100' r='70' fill='%23FF8A65' opacity='0.25'/%3E%3Ccircle cx='280' cy='140' r='55' fill='%23FFB74D' opacity='0.2'/%3E%3Cpath d='M0 200 Q100 160 200 200 Q300 240 400 200' stroke='%23FF8A65' stroke-width='2' fill='none' opacity='0.25'/%3E%3C/svg%3E"); }
+  .cover-autumn { background: linear-gradient(180deg, #f5e6d3 0%, #f8efe3 60%, #f8f7f4 100%); }
+  .cover-autumn::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Cellipse cx='100' cy='130' rx='60' ry='45' fill='%23E89B5C' opacity='0.2'/%3E%3Cellipse cx='300' cy='100' rx='45' ry='35' fill='%23C9A882' opacity='0.2'/%3E%3Cpath d='M0 170 Q100 130 200 170 Q300 210 400 170' stroke='%23E89B5C' stroke-width='2' fill='none' opacity='0.25'/%3E%3C/svg%3E"); }
+  .cover-winter { background: linear-gradient(180deg, #d6e4f0 0%, #e9eef4 60%, #f8f7f4 100%); }
+  .cover-winter::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Ccircle cx='100' cy='110' r='50' fill='%235A7FA8' opacity='0.2'/%3E%3Ccircle cx='250' cy='140' r='40' fill='%236B8CAE' opacity='0.15'/%3E%3Ccircle cx='350' cy='90' r='30' fill='%234A6F9C' opacity='0.15'/%3E%3Cpath d='M0 180 Q100 140 200 180 Q300 220 400 180' stroke='%235A7FA8' stroke-width='2' fill='none' opacity='0.2'/%3E%3C/svg%3E"); }
+
+  .cover-content { position: relative; z-index: 1; max-width: 600px; }
+  .cover-label {
+    display: inline-block; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    padding: 0.3rem 1.2rem; border-radius: 999px; margin-bottom: 1rem;
+  }
+  .spring .cover-label { background: #d4edda; color: #2d6a4f; }
+  .summer .cover-label { background: #fde2d3; color: #d45d2c; }
+  .autumn .cover-label { background: #f5e6d3; color: #b87333; }
+  .winter .cover-label { background: #d6e4f0; color: #3a5a80; }
+
+  .cover-title { font-size: 2.4rem; font-weight: 900; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+  .spring .cover-title { color: #2d6a4f; } .summer .cover-title { color: #d45d2c; }
+  .autumn .cover-title { color: #b87333; } .winter .cover-title { color: #3a5a80; }
+
+  .cover-subtitle { font-size: 1rem; color: #888; margin-bottom: 2rem; }
+  .cover-philosophy { font-size: 0.9rem; color: #999; font-style: italic; line-height: 1.8; }
+  .cover-scroll { position: absolute; bottom: 1.5rem; z-index: 1; font-size: 0.7rem; color: #bbb; letter-spacing: 0.2em; animation: bounce 2s infinite; }
+
+  /* ===== Season Divider ===== */
+  .season-divider {
+    position: relative; max-width: 700px; margin: 0 auto; padding: 3rem 2rem; text-align: center;
+  }
+  .divider-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #ccc 20%, #ccc 80%, transparent); }
+  .divider-reflection { margin-top: 1.5rem; font-size: 0.85rem; color: #999; font-style: italic; line-height: 1.8; }
+
+  /* ===== Timeline ===== */
+  .timeline-section { padding: 2rem 2rem 5rem; position: relative; }
+  .timeline {
+    max-width: 700px; margin: 0 auto; position: relative;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 3px; transform: translateX(-50%); border-radius: 999px;
+  }
+  .spring .timeline::before { background: linear-gradient(180deg, #6ECF7A, #6ECF7A44); }
+  .summer .timeline::before { background: linear-gradient(180deg, #FF8A65, #FF8A6544); }
+  .autumn .timeline::before { background: linear-gradient(180deg, #E89B5C, #E89B5C44); }
+  .winter .timeline::before { background: linear-gradient(180deg, #5A7FA8, #5A7FA844); }
+
+  /* ===== Card ===== */
+  .term-card {
+    position: relative; width: 44%; margin-bottom: 2rem;
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    transition: transform 0.4s, box-shadow 0.4s;
+    opacity: 0; transform: translateY(24px);
+    cursor: pointer; overflow: hidden;
+  }
+  .term-card.visible { opacity: 1; transform: translateY(0); }
+  .term-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
+  .term-card.left { margin-right: auto; }
+  .term-card.right { margin-left: auto; }
+
+  .term-card::after {
+    content: ''; position: absolute; top: 24px;
+    width: 10px; height: 10px; border-radius: 50%; border: 3px solid #fff;
+  }
+  .term-card.left::after { right: -32px; }
+  .term-card.right::after { left: -32px; }
+  .spring .term-card::after { background: #6ECF7A; }
+  .summer .term-card::after { background: #FF8A65; }
+  .autumn .term-card::after { background: #E89B5C; }
+  .winter .term-card::after { background: #5A7FA8; }
+
+  /* Collapsed state */
+  .card-collapsed { padding: 1.4rem 1.5rem; }
+  .card-collapsed .card-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+  .spring .card-collapsed .card-name { color: #2d6a4f; }
+  .summer .card-collapsed .card-name { color: #d45d2c; }
+  .autumn .card-collapsed .card-name { color: #b87333; }
+  .winter .card-collapsed .card-name { color: #3a5a80; }
+  .card-collapsed .card-kernel { font-size: 0.82rem; color: #aaa; font-style: italic; }
+  .card-expand-hint { font-size: 0.65rem; color: #ccc; letter-spacing: 0.1em; text-align: right; margin-top: 0.3rem; transition: color 0.3s; }
+  .term-card:hover .card-expand-hint { color: #999; }
+
+  /* Expanded state */
+  .term-card.expanded { cursor: default; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+  .card-expanded-body { display: none; padding: 0 1.5rem 1.5rem; }
+  .term-card.expanded .card-expanded-body { display: block; }
+  .term-card.expanded .card-collapsed { padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; margin-bottom: 0.5rem; }
+
+  .exp-title { font-size: 1rem; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 0.75rem; }
+  .spring .exp-title { color: #2d6a4f; } .summer .exp-title { color: #d45d2c; }
+  .autumn .exp-title { color: #b87333; } .winter .exp-title { color: #3a5a80; }
+
+  .exp-block { margin-bottom: 1rem; }
+  .exp-block:last-child { margin-bottom: 0; }
+  .exp-label { font-size: 0.65rem; letter-spacing: 0.15em; color: #bbb; text-transform: uppercase; margin-bottom: 0.2rem; }
+  .exp-text { font-size: 0.88rem; color: #555; line-height: 1.8; }
+  .exp-quote { font-size: 0.88rem; color: #888; font-style: italic; line-height: 1.8; padding-left: 0.6rem; border-left: 3px solid #e0e0e0; }
+  .exp-finale { font-size: 0.88rem; font-weight: 700; line-height: 1.8; }
+  .spring .exp-finale { color: #2d6a4f; } .summer .exp-finale { color: #d45d2c; }
+  .autumn .exp-finale { color: #b87333; } .winter .exp-finale { color: #3a5a80; }
+
+  /* ===== Close button ===== */
+  .card-close {
+    display: none; position: absolute; top: 0.75rem; right: 0.75rem;
+    width: 24px; height: 24px; border-radius: 50%; border: none; background: #f0f0f0;
+    font-size: 0.75rem; color: #999; cursor: pointer; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .term-card.expanded .card-close { display: flex; }
+  .card-close:hover { background: #e0e0e0; color: #666; }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center; padding: 5rem 2rem 3rem;
+    background: linear-gradient(180deg, #f8f7f4, #e8e6df);
+  }
+  .footer h3 { font-size: 1.5rem; font-weight: 800; color: #1a1a1a; margin-bottom: 1rem; }
+  .footer p { color: #888; max-width: 500px; margin: 0 auto 2rem; }
+  .back-top { display: inline-block; padding: 0.6rem 2rem; border: 1px solid #ccc; border-radius: 999px; color: #666; text-decoration: none; font-size: 0.85rem; transition: all 0.3s; }
+  .back-top:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  /* ===== Mobile ===== */
+  @media (max-width: 700px) {
+    .timeline::before { left: 1.25rem; }
+    .term-card { width: calc(100% - 3rem); margin-left: 3rem !important; margin-right: 0 !important; }
+    .term-card.left::after, .term-card.right::after { left: -24px; right: auto; }
+    .cover-title { font-size: 1.6rem; }
+    .hero-seasons { gap: 0.75rem; } .hero-season { width: 40px; height: 40px; font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-badge">AI + 职业素养微专业 · 成长档案</div>
+  <h1>一岁节气轮转<br>一场职业化生长</h1>
+  <h2>从懵懂被动到主动掌控——以二十四节气为时序骨架的 AI 微专业成长叙事</h2>
+  <div class="hero-seasons">
+    <a href="#spring" class="hero-season hero-spring" style="text-decoration:none">🌱</a>
+    <a href="#summer" class="hero-season hero-summer" style="text-decoration:none">🔥</a>
+    <a href="#autumn" class="hero-season hero-autumn" style="text-decoration:none">🍂</a>
+    <a href="#winter" class="hero-season hero-winter" style="text-decoration:none">❄️</a>
+  </div>
+  <div class="scroll-hint">向下滚动 · 开始旅程 ↓</div>
+</section>
+
+<!-- ========== 春生 ========== -->
+<section class="season-cover cover-spring" id="spring">
+  <div class="cover-content">
+    <span class="cover-label">春生 · 萌芽启始</span>
+    <h2 class="cover-title">认知破冰，从零出发</h2>
+    <p class="cover-subtitle">立春 — 谷雨 · 从初识到入门，一段忐忑又坚定的启程</p>
+    <p class="cover-philosophy">春天不问收获，只管播种。<br>每一颗埋进土壤的念头，都将在日后的某个时刻破土而出。</p>
+  </div>
+  <div class="cover-scroll">↓ 查看成长节点</div>
+</section>
+
+<section class="timeline-section spring">
+  <div class="timeline" id="timeline-spring"></div>
+</section>
+
+<!-- Divider -->
+<div class="season-divider">
+  <div class="divider-line"></div>
+  <p class="divider-reflection">从懵懂到坚定，从忐忑到笃定。<br>春天种下的种子，在夏天的烈日下开始疯长。</p>
+</div>
+
+<!-- ========== 夏长 ========== -->
+<section class="season-cover cover-summer" id="summer">
+  <div class="cover-content">
+    <span class="cover-label">夏长 · 深耕实践</span>
+    <h2 class="cover-title">知行并进，全面进阶</h2>
+    <p class="cover-subtitle">立夏 — 大暑 · 跳出课堂，在竞赛与职场调研中淬炼真知</p>
+    <p class="cover-philosophy">夏天不惧炎热，只管生长。<br>每一滴汗水都在浇灌根系，让能力在骄阳下拔节抽穗。</p>
+  </div>
+  <div class="cover-scroll">↓ 查看成长节点</div>
+</section>
+
+<section class="timeline-section summer">
+  <div class="timeline" id="timeline-summer"></div>
+</section>
+
+<!-- Divider -->
+<div class="season-divider">
+  <div class="divider-line"></div>
+  <p class="divider-reflection">在实践的土壤里扎根，在竞赛与调研中淬炼。<br>那些流过的汗，终将变成秋日的第一颗果实。</p>
+</div>
+
+<!-- ========== 秋收 ========== -->
+<section class="season-cover cover-autumn" id="autumn">
+  <div class="cover-content">
+    <span class="cover-label">秋收 · 沉淀落地</span>
+    <h2 class="cover-title">赋能实操，成果落地</h2>
+    <p class="cover-subtitle">立秋 — 霜降 · 从零攻克 AI 工具，到交付两件真实的行业作品</p>
+    <p class="cover-philosophy">秋天不问辛苦，只管收割。<br>每一份作品都是时间给出的答案，为曾经的播种画上句点。</p>
+  </div>
+  <div class="cover-scroll">↓ 查看成长节点</div>
+</section>
+
+<section class="timeline-section autumn">
+  <div class="timeline" id="timeline-autumn"></div>
+</section>
+
+<!-- Divider -->
+<div class="season-divider">
+  <div class="divider-line"></div>
+  <p class="divider-reflection">从会用工具到驾驭工具，从交付成果到沉淀思维。<br>落叶并非凋零，而是为下一次生长积蓄养分。</p>
+</div>
+
+<!-- ========== 冬藏 ========== -->
+<section class="season-cover cover-winter" id="winter">
+  <div class="cover-content">
+    <span class="cover-label">冬藏 · 内化闭环</span>
+    <h2 class="cover-title">思维升维，成长成型</h2>
+    <p class="cover-subtitle">立冬 — 大寒 · 沉淀一切经历，搭建完整的职业能力体系</p>
+    <p class="cover-philosophy">冬天不问速度，只管沉淀。<br>万物归藏，是为了让下一轮萌发拥有更深厚的底气。</p>
+  </div>
+  <div class="cover-scroll">↓ 查看成长节点</div>
+</section>
+
+<section class="timeline-section winter">
+  <div class="timeline" id="timeline-winter"></div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <h3>二十四节气流转，步步皆为成长</h3>
+  <p>微专业赋予我的，不只是一项技能、几份作品，更是主动成长的意识、直面未知的勇气、知行合一的能力与清晰笃定的职业方向。</p>
+  <a href="#" class="back-top">↑ 回到起点</a>
+</footer>
+
+<script>
+const seasonColor = { spring:'#2d6a4f', summer:'#d45d2c', autumn:'#b87333', winter:'#3a5a80' };
+
+const solarTerms = {
+  spring: [
+    {
+      name:'立春', kernel:'万物始萌，新序开启',
+      collapsed_event:'通过公众号、辅导员推荐初识AI微专业，心生向往，萌生报名念头。',
+      title:'立春 · 萌芽有期',
+      intro:'东风解冻，万物始萌。每一次出发，都始于一颗怦然心动的好奇——时序轮转，万物循序生长。每一个节气，都是一段脚踏实地的成长。',
+      chronicle:'通过公众号推文与辅导员推荐，第一次接触到"AI+职业素养微专业"项目。彼时的我刚步入大学，对职业规划、行业发展都十分懵懂，既对这个全新的学习赛道充满好奇，又因未知的挑战心生紧张与不安。带着忐忑又期待的心情，我认真了解项目信息，最终萌生了报名念头。',
+      reflection:'从"这是什么？"到"我想试试"，不过是几天的心路历程。那是我第一次意识到：大学不只是上课和考试，还有一条需要自己主动争取的成长路径。这个念头很小，但它是一切的起点。',
+      finale:'所有伟大的探索，都始于一次勇敢的好奇。',
+    },
+    {
+      name:'雨水', kernel:'润物蓄力，默默积淀',
+      collapsed_event:'怀揣紧张与不安，认真整理个人材料、提交报名申请表，慎重迈出第一步。',
+      title:'雨水 · 蓄力有期',
+      intro:'润物无声，细雨入心。认真对待每一次选择，是对自己最好的投资——成长不必轰轰烈烈，默默积蓄本身就是一种力量。',
+      chronicle:'怀揣着一丝紧张与不安，我认真整理个人材料，梳理学习态度、个人优势与未来期许，郑重提交了报名申请表。每一个问题我都反复斟酌回答，因为我知道这是在为自己争取一次难得的成长机会。',
+      reflection:'整理材料的过程本身就是一次深刻的自我审视——我有什么？我想要什么？我凭什么？这三个简单的问题，后来贯穿了整个微专业的学习。慎重迈出的这第一步，教会我：认真对待自己，世界才会认真对待你。',
+      finale:'沉默的准备，往往是最响亮的宣言。',
+    },
+    {
+      name:'惊蛰', kernel:'春雷启蛰，唤醒本心',
+      collapsed_event:'收到面试通知，交织着紧张与兴奋，主动梳理个人优势与未来期许，反复打磨面试表述、全力备战考核。',
+      title:'惊蛰 · 觉醒有期',
+      intro:'春雷乍动，蛰虫惊醒。打破惰性是成长中最难也最重要的一课——当内心的勇气被唤醒，再深的冬天也拦不住春天。',
+      chronicle:'收到面试通知时，内心交织着紧张与兴奋。为了把握住这次宝贵的成长机会，我主动梳理个人优势、学习态度与成长目标，反复打磨面试表述、调整状态，全力以赴备战面试考核。',
+      reflection:'面试前的准备让我第一次认真"推销"自己。以前总觉得成绩单就是最好的简历，但那一次我明白了：让别人看到你的潜力、你的态度、你愿意成长的决心，比已有的成绩更重要。从被动等待到主动争取，这本身就是一次觉醒。',
+      finale:'直面未知的那一刻，你已经赢了昨天的自己。',
+    },
+    {
+      name:'春分', kernel:'昼夜均衡，步入正轨',
+      collapsed_event:'凭借真诚的态度与充分的准备顺利通过面试，正式成为AI+职业素养微专业学员，身份确立，新旅程开启。',
+      title:'春分 · 入轨有期',
+      intro:'昼夜均分，天地平衡。踏上新赛道的那一刻，人生的罗盘终于有了清晰的方向——不是准备好了才开始，而是开始了才慢慢准备好。',
+      chronicle:'凭借真诚的态度与充分的准备，我顺利通过面试，正式成为AI+职业素养微专业的一名学员。从报名者到正式学员，身份的转变让我第一次感受到"被选择"的喜悦和随之而来的责任感。',
+      reflection:'入选的喜悦很快被一种新的紧张所取代——身边的同学都很优秀，课程看起来也不轻松。但正是这种"被拉入正轨"的感觉，让我第一次拥有了清晰的成长方向。以前是"走一步看一步"，现在是"跟着课程一步步走"。看似只是身份的落地，实则是心态的转型。',
+      finale:'不是准备好了才开始，而是开始了才慢慢准备好。',
+    },
+    {
+      name:'清明', kernel:'天清地明，认知澄澈',
+      collapsed_event:'首次开课，授课老师以启发式提问引导向内思考、向外探索，告别碎片化被动学习，初步建立职业意识。',
+      title:'清明 · 澄澈有期',
+      intro:'气清景明，万物澄澈。打破认知的迷雾，才能看见真正属于自己的路——最难的功课不是解一道题，而是回答"我要成为谁"。',
+      chronicle:'微专业的首次开课便彻底打破了我碎片化、被动式的学习思维。授课老师没有直接灌输知识，而是以启发式提问引导我们向内思考、向外探索，让我们明白大学成长不止于课内成绩，更在于构建专属的职业认知、搭建清晰的职业规划。',
+      reflection:'老师问了一个问题："你想要的职业未来是什么样子？"我被问住了。在此之前，我对"职业规划"的理解仅限于"找一份好工作"。那一堂课让我第一次跳出学生视角，开始把"职业"当作一个需要主动思考和设计的长期命题。认知被洗过的感觉很难忘——迷茫还在，但迷雾开始散了。',
+      finale:'最难的功课不是解一道题，而是回答"我要成为谁"。',
+    },
+    {
+      name:'谷雨', kernel:'雨生百谷，学识生发',
+      collapsed_event:'以小组为单位开展行业调研与职业深度分析，从行业前景、岗位特质、能力要求等多维度展开探究，深度思考职业选择与发展方向。',
+      title:'谷雨 · 生发有期',
+      intro:'雨生百谷，学识萌发。春天最后一场雨落下，那些播下的种子正在地下积蓄看不见的力量——心之所向，步履不停。',
+      chronicle:'在课程实训中，以小组为单位开展行业调研与职业深度分析，从行业前景、岗位特质、能力要求、适配匹配度等多个维度展开探究。我第一次跳出学生视角，以职场人的思维方式审视职业选择。',
+      reflection:'小组讨论中，每个人对"好工作"的定义都不一样——有人看重薪资，有人追求兴趣，有人在意成长空间。那段时间我开始明白：职业规划不是找到一个标准答案，而是画出属于自己的坐标系。谷雨是春天的最后一站，但属于我的成长，才刚刚完成了第一章。',
+      finale:'心之所向，步履不停。春天的播种，才刚刚开始。',
+    },
+  ],
+  summer: [
+    { name:'立夏', kernel:'万物繁茂，进阶生长', event:'主动跳出课堂学习的局限，决定报名参加中国机器人及人工智能大赛新质生产力赛道，尝试跨界涉足陌生的人工智能领域。', insight:'主动破局，敢于探索未知领域' },
+    { name:'小满', kernel:'小得盈满，积累初成', event:'从零基础摸索、组队磨合、查阅资料到落地创作，积极备赛，积累跨学科知识与竞赛经验。', insight:'点滴积累，实现能力多元拓展' },
+    { name:'芒种', kernel:'忙有所得，耕耘落地', event:'完成竞赛全程参与，对AI赋能产业、新质生产力发展有了全新认知，在实战中锻炼跨界学习、团队协作与问题解决能力。', insight:'以赛促学，将知识转化为实战能力' },
+    { name:'夏至', kernel:'昼长极盛，深耕务实', event:'首次参与校园专场招聘会，近距离接触企业HR与招聘岗位，清晰掌握当下企业的人才标准与岗位核心需求。', insight:'对接职场，跳出书本对标真实市场' },
+    { name:'小暑', kernel:'暑气渐盛，精进不止', event:'二次参与招聘会，精准对照自身现状，理清个人能力与目标岗位的匹配度与具体差距。', insight:'复盘自查，明确后续提升方向' },
+    { name:'大暑', kernel:'盛夏淬炼，能力升华', event:'结合两次职场调研的真实反馈，优化个人职业规划，让后续的学习与能力打磨更具针对性，让规划不再空泛。', insight:'知行合一，让规划落地贴合现实' },
+  ],
+  autumn: [
+    { name:'立秋', kernel:'凉风始至，转向深耕', event:'正式系统开启AI工具线上+线下课程学习，依托网课资源与实操教学，从零起步、循序渐进攻坚新技能。', insight:'聚焦核心，深耕AI职业核心能力' },
+    { name:'处暑', kernel:'褪去浮躁，沉淀务实', event:'逐步吃透各类AI工具的核心功能、适用场景与使用逻辑，彻底摆脱对人工智能的陌生与畏惧，形成使用思维。', insight:'夯实基础，建立AI应用底层逻辑' },
+    { name:'白露', kernel:'凝露成珠，细节精进', event:'独立开展上海地区法律科技行业调研，借助AI辅助完成行业分析报告，实现AI与行业调研的深度结合。', insight:'工具赋能，实现AI与行业调研融合' },
+    { name:'秋分', kernel:'收支平衡，思维成熟', event:'启动上海政法学院国际教育学院中外合办方向项目，开展海量信息搜集与筛选工作，把好信息源头第一关。', insight:'严谨务实，把控信息源头与质量' },
+    { name:'寒露', kernel:'寒气渐生，打磨求精', event:'完成数据筛选、关键信息提取、AI辅助内容生成，初步形成完整文案框架，走通内容生产全流程。', insight:'流程闭环，掌握全链路内容生产逻辑' },
+    { name:'霜降', kernel:'收敛沉淀，成型落地', event:'反复打磨优化，落地中外合办方向初版完整文案，从学习到产出真实作品，完成成果落地交付。', insight:'从学习到交付，完成成果落地输出' },
+  ],
+  winter: [
+    { name:'立冬', kernel:'万物归藏，内化于心', event:'复盘AI工具使用经验，学习智能体选型、对比与适配逻辑，不再满足于"会用"，而是学会"会选"。', insight:'跳出套用，学会甄别与选择工具' },
+    { name:'小雪', kernel:'细琢精修，技法升级', event:'深耕关键词设计与提示词撰写技巧，告别盲目提问与随机生成，精准设计提示词、把控内容质量。', insight:'掌握结构化思维，精准驾驭AI工具' },
+    { name:'大雪', kernel:'厚积沉潜，认知升级', event:'总结人机协同创作的核心逻辑，深刻理解"人工主导、AI辅助"的边界，真正做到善用工具、驾驭工具而非依赖工具。', insight:'掌控工具，形成独立判断思维' },
+    { name:'冬至', kernel:'阴极之至，蓄力新生', event:'整合所有项目、竞赛、调研、学习经历，梳理个人能力体系，搭建从校园走向职场的完整成长框架。', insight:'系统复盘，搭建完整个人成长体系' },
+    { name:'小寒', kernel:'潜心精进，打磨短板', event:'查漏补缺，进一步优化职业规划，细化长期发展路径，对照目标岗位能力要求做最后一次全面自检。', insight:'精益求精，完善个人发展蓝图' },
+    { name:'大寒', kernel:'岁终圆满，闭环新生', event:'完成全周期成长闭环：从初识懵懂到熟练应用AI、从没有职业规划到拥有清晰笃定的发展方向，一岁轮转，成长成型。', insight:'一岁闭环，成长成型，奔赴长远未来' },
+  ],
+};
+
+// ===== Render spring cards (detailed format) =====
+const springTimeline = document.getElementById('timeline-spring');
+solarTerms.spring.forEach((term, i) => {
+  const card = document.createElement('div');
+  card.className = `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+  card.innerHTML = `
+    <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
+    <div class="card-collapsed">
+      <div class="card-name">${term.name}</div>
+      <div class="card-kernel">「${term.kernel}」</div>
+      <div class="card-expand-hint">点击展开 ›</div>
+    </div>
+    <div class="card-expanded-body">
+      <div class="exp-title">${term.title}</div>
+      <div class="exp-block">
+        <div class="exp-label">节气短句引言</div>
+        <div class="exp-quote">${term.intro}</div>
+      </div>
+      <div class="exp-block">
+        <div class="exp-label">个人成长纪实</div>
+        <div class="exp-text">${term.chronicle}</div>
+      </div>
+      <div class="exp-block">
+        <div class="exp-label">成长心路细节</div>
+        <div class="exp-text">${term.reflection}</div>
+      </div>
+      <div class="exp-block">
+        <div class="exp-label">节气成长结语</div>
+        <div class="exp-finale">${term.finale}</div>
+      </div>
+    </div>
+  `;
+  card.addEventListener('click', function(e) {
+    if (e.target.closest('.card-close')) return;
+    expandCard(this);
+  });
+  springTimeline.appendChild(card);
+});
+
+// ===== Render summer/autumn/winter cards (simple format) =====
+['summer','autumn','winter'].forEach(season => {
+  const timeline = document.getElementById(`timeline-${season}`);
+  solarTerms[season].forEach((term, i) => {
+    const card = document.createElement('div');
+    card.className = `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+    card.innerHTML = `
+      <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
+      <div class="card-collapsed">
+        <div class="card-name">${term.name}</div>
+        <div class="card-kernel">「${term.kernel}」</div>
+        <div class="card-expand-hint">点击展开 ›</div>
+      </div>
+      <div class="card-expanded-body">
+        <div class="exp-title">${term.name} · 生长有期</div>
+        <div class="exp-block">
+          <div class="exp-label">成长事件</div>
+          <div class="exp-text">${term.event}</div>
+        </div>
+        <div class="exp-block">
+          <div class="exp-label">成长提炼</div>
+          <div class="exp-finale">${term.insight}</div>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.card-close')) return;
+      expandCard(this);
+    });
+    timeline.appendChild(card);
+  });
+});
+
+function expandCard(card) {
+  // Collapse others in same season
+  const timeline = card.parentElement;
+  timeline.querySelectorAll('.term-card.expanded').forEach(c => {
+    if (c !== card) collapseCard(c);
+  });
+  card.classList.add('expanded');
+  // Scroll card into better view
+  setTimeout(() => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 150);
+}
+
+function collapseCard(card) {
+  card.classList.remove('expanded');
+}
+
+// Intersection Observer for fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.term-card').forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>
