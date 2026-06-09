@@ -162,7 +162,7 @@
     box-shadow: 0 2px 16px rgba(0,0,0,0.06);
     transition: transform 0.4s, box-shadow 0.4s;
     opacity: 0; transform: translateY(24px);
-    cursor: pointer; overflow: hidden;
+    cursor: pointer;
   }
   .story-card.visible { opacity: 1; transform: translateY(0); }
   .story-card:hover { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(0,0,0,0.12); }
@@ -183,15 +183,15 @@
   }
   .story-card .card-collapsed { padding: 1.4rem 1.5rem; }
   .story-card .card-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.2rem; color: #8b6914; }
-  .story-card .card-kernel { font-size: 0.82rem; color: #b8a88a; font-style: italic; }
-  .story-card .card-expand-hint { font-size: 0.65rem; color: #c9b896; letter-spacing: 0.1em; text-align: right; margin-top: 0.3rem; }
+  .story-card .card-kernel { font-size: 0.82rem; color: #998866; font-style: italic; }
+  .story-card .card-expand-hint { font-size: 0.65rem; color: #bba880; letter-spacing: 0.1em; text-align: right; margin-top: 0.3rem; }
   .story-card.expanded { cursor: default; box-shadow: 0 4px 28px rgba(0,0,0,0.14); }
   .story-card .card-expanded-body { display: none; padding: 0 1.5rem 1.5rem; }
   .story-card.expanded .card-expanded-body { display: block; }
   .story-card.expanded .card-collapsed { padding-bottom: 0.5rem; border-bottom: 1px solid #f0ece0; margin-bottom: 0.5rem; }
-  .story-body { font-size: 0.88rem; color: #5a5040; line-height: 2; text-align: justify; }
+  .story-body { font-size: 0.9rem; color: #3d3628; line-height: 2; text-align: justify; }
   .story-body p { margin-bottom: 1em; }
-  .story-body p:first-child::first-letter { font-size: 1.6em; font-weight: 700; color: #b87333; float: left; line-height: 1; margin-right: 0.15em; }
+  .story-body p:first-child::first-letter { font-size: 1.6em; font-weight: 700; color: #b87333; float: left; line-height: 0.85; margin-right: 0.12em; margin-top: 0.05em; }
 
   /* ===== Footer ===== */
   .footer {
