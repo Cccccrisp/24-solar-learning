@@ -154,6 +154,45 @@
   .term-card.expanded .card-close { display: flex; }
   .card-close:hover { background: #e0e0e0; color: #666; }
 
+  /* ===== Story Card (featured narrative) ===== */
+  .story-card {
+    position: relative; width: 44%; margin-bottom: 2rem;
+    background: linear-gradient(135deg, #fefefe 0%, #faf8f5 100%);
+    border: 2px solid #e8e0d0; border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    transition: transform 0.4s, box-shadow 0.4s;
+    opacity: 0; transform: translateY(24px);
+    cursor: pointer; overflow: hidden;
+  }
+  .story-card.visible { opacity: 1; transform: translateY(0); }
+  .story-card:hover { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(0,0,0,0.12); }
+  .story-card.left { margin-right: auto; }
+  .story-card.right { margin-left: auto; }
+  .story-card::after {
+    content: '✦'; position: absolute; top: 24px;
+    font-size: 0.7rem; color: #c9a96e;
+    width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+  }
+  .story-card.left::after { right: -30px; }
+  .story-card.right::after { left: -30px; }
+  .story-badge {
+    display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em;
+    padding: 0.2rem 0.7rem; border-radius: 999px;
+    background: linear-gradient(135deg, #f5e6d3, #ecd9bd); color: #b87333;
+    margin-bottom: 0.6rem;
+  }
+  .story-card .card-collapsed { padding: 1.4rem 1.5rem; }
+  .story-card .card-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.2rem; color: #8b6914; }
+  .story-card .card-kernel { font-size: 0.82rem; color: #b8a88a; font-style: italic; }
+  .story-card .card-expand-hint { font-size: 0.65rem; color: #c9b896; letter-spacing: 0.1em; text-align: right; margin-top: 0.3rem; }
+  .story-card.expanded { cursor: default; box-shadow: 0 4px 28px rgba(0,0,0,0.14); }
+  .story-card .card-expanded-body { display: none; padding: 0 1.5rem 1.5rem; }
+  .story-card.expanded .card-expanded-body { display: block; }
+  .story-card.expanded .card-collapsed { padding-bottom: 0.5rem; border-bottom: 1px solid #f0ece0; margin-bottom: 0.5rem; }
+  .story-body { font-size: 0.88rem; color: #5a5040; line-height: 2; text-align: justify; }
+  .story-body p { margin-bottom: 1em; }
+  .story-body p:first-child::first-letter { font-size: 1.6em; font-weight: 700; color: #b87333; float: left; line-height: 1; margin-right: 0.15em; }
+
   /* ===== Footer ===== */
   .footer {
     text-align: center; padding: 5rem 2rem 3rem;
@@ -334,6 +373,18 @@ const solarTerms = {
       reflection:'小组讨论中，每个人对"好工作"的定义都不一样——有人看重薪资，有人追求兴趣，有人在意成长空间。那段时间我开始明白：职业规划不是找到一个标准答案，而是画出属于自己的坐标系。谷雨是春天的最后一站，但属于我的成长，才刚刚完成了第一章。',
       finale:'心之所向，步履不停。春天的播种，才刚刚开始。',
     },
+    {
+      type: 'story',
+      name: '谷雨润心，破茧成蝶',
+      kernel: '从迷茫的文科小白，到独立思考、从容表达的自信学习者——微专业如谷雨润物无声，滋养青春成长。',
+      body: `<p>谷雨时节，细雨如丝，浸染天地，窗外草木苍翠欲滴。我静望着朦胧雨幕，心底的焦虑却如藤蔓肆意蔓延。身为文科生，AI 于我全然陌生，看着身边同学早已规划好前路，我却仍在为毕业去向深深迷茫，未来何去何从，毫无头绪，未知的彷徨如乌云萦绕心头。</p>
+<p>一次校园活动中，我了解到上政 "AI + 职业素养" 微专业。作为教育部双千计划首批建设微专业，它以 AI 赋能职业素养为核心，绝非普通兴趣课程。这束微光划破迷茫，我毅然选择奔赴学习。</p>
+<p>入学后，我系统接触三阶教学模型。行业探索阶段，借助 AI 批量梳理招聘岗位信息，繁杂数据扑面而来。对照自身梳理能力缺口，压力油然而生。我伏案静坐，伴着昏黄台灯，一笔一画描摹个人成长路径图，每一笔，都在为未来勾勒清晰方向。</p>
+<p>初学提示词时，我毫无章法，给出的指令笼统模糊，AI 输出始终达不到预期。课程以任务驱动、场景实战为主，在老师引导下，我慢慢学会精准提问，针对法务、社科类岗位拆解核心能力，写出专业精准的提示词。</p>
+<p>成长从无坦途。起初我只会简单让 AI 生成内容，面对繁杂零散的信息，不懂甄别、不会修正，一度陷入无助与困惑。随着学习深入，我逐渐学会理性评估 AI 输出，以批判性思维优化打磨，每一次突破，都是一次自我蜕变。</p>
+<p>结业作品打磨从容有序，早已不见当初的慌乱。如今的我，不再畏惧职业规划，敢于自信展示学习成果，熟练运用 AI 赋能成长与求职之路。</p>
+<p>从迷茫懵懂的入门小白，到独立思考、从容表达的自信学习者，微专业如谷雨润物无声，滋养青春成长，助我破茧成蝶。</p>`,
+    },
   ],
   summer: [
     {
@@ -400,6 +451,17 @@ const solarTerms = {
       chronicle:'正式系统开启了AI工具的线上+线下课程学习。面对全新的技术领域，我不再满足于浅尝辄止，而是制定了详细的学习计划，从零开始攻坚AI新技能，力求在这一核心赛道上建立自己的优势。',
       reflection:'心态上，我褪去了初学者的浮躁，多了一份"空杯心态"。我不再畏惧代码或复杂的逻辑，而是像打磨一件工艺品一样，耐心拆解每一个功能模块。这种从"被动接受"到"主动攻克"的转变，让我对AI技术从单纯的"好奇"变成了"渴望驾驭"。',
       finale:'聚焦核心，深耕细作，这是职业能力扎根的开始。',
+    },
+    {
+      type: 'story',
+      name: '立秋逐光，笃行成骨干',
+      kernel: '曾经胆怯内向的自己，褪去了怯懦与不安，成长为独当一面的项目骨干——心怀微光，稳步前行，终能穿越迷雾。',
+      body: `<p>"云天收夏色，木叶动秋声。" 立秋清风掠过枝头，黄叶簌簌飘落。那时的我学业平平，从未参与过实践项目，每逢集体任务便缩在人群里，不敢上前半步，心底满是自卑，前路也像阴沉的秋日天空，黯淡无光。</p>
+<p>偶然得知上海政法学院 "AI + 职业素养" 微专业——教育部 "双千" 计划首批入库项目，依托三阶教学模式与校企双导师授课，仿佛一束微光穿透阴霾，我毫不犹豫报名加入。</p>
+<p>学习期间，小组接到核心任务：自主设计一款 AI 法律科技软件，完成网页端开发，并最终以 PPT 形式进行成果汇报。从功能规划、页面搭建到内容落地，整套流程繁杂又极具挑战。面对全新的领域，我内心满是忐忑，可望着组员真诚信任的眼神，我深吸一口气，鼓起勇气主动牵头负责整个项目。</p>
+<p>我结合每个人的特长细致分工：有人钻研法律实务需求，敲定软件核心功能；有人伏案编写代码、调试网页界面，一遍遍优化交互体验；还有人梳理项目脉络，筹备汇报 PPT 框架。满心期待的初稿方案与网页原型，被企业导师指出诸多漏洞，落差感瞬间涌上心头，连日的努力仿佛付诸东流。但这一次，我没有低头退缩，主动上前请教问题，从起初说话拘谨紧张，到后来能从容和导师、伙伴交流探讨。</p>
+<p>往后的日子里，实训室的灯光常常陪伴我们到傍晚。我们反复打磨软件功能、修正网页 bug、精炼 PPT 文案与演示逻辑，在一次次研讨、试错、迭代中，团队配合愈发默契，项目成果也日渐完善。最终，我们顺利完成网页制作与 PPT 汇报，整套成果收获了导师的充分肯定。</p>
+<p>立秋拾光，步履不停。曾经胆怯内向的我，褪去了怯懦与不安，成长为独当一面的项目骨干。心怀微光，稳步前行，终能穿越迷雾，绽放独有的光芒。</p>`,
     },
     {
       name:'处暑', kernel:'褪去浮躁，沉淀务实',
@@ -505,51 +567,27 @@ const solarTerms = {
   ],
 };
 
-// ===== Render spring cards (detailed format) =====
+// ===== Render spring cards (detailed format + stories) =====
 const springTimeline = document.getElementById('timeline-spring');
 solarTerms.spring.forEach((term, i) => {
+  const isStory = term.type === 'story';
   const card = document.createElement('div');
-  card.className = `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
-  card.innerHTML = `
-    <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
-    <div class="card-collapsed">
-      <div class="card-name">${term.name}</div>
-      <div class="card-kernel">「${term.kernel}」</div>
-      <div class="card-expand-hint">点击展开 ›</div>
-    </div>
-    <div class="card-expanded-body">
-      <div class="exp-title">${term.title}</div>
-      <div class="exp-block">
-        <div class="exp-label">节气短句引言</div>
-        <div class="exp-quote">${term.intro}</div>
+  card.className = isStory ? `story-card ${i % 2 === 0 ? 'left' : 'right'}` : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+  if (isStory) {
+    card.innerHTML = `
+      <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
+      <div class="card-collapsed">
+        <span class="story-badge">成长故事</span>
+        <div class="card-name">${term.name}</div>
+        <div class="card-kernel">${term.kernel}</div>
+        <div class="card-expand-hint">点击展开阅读全文 ›</div>
       </div>
-      <div class="exp-block">
-        <div class="exp-label">个人成长纪实</div>
-        <div class="exp-text">${term.chronicle}</div>
+      <div class="card-expanded-body">
+        <div class="exp-title" style="color:#8b6914">${term.name}</div>
+        <div class="story-body">${term.body}</div>
       </div>
-      <div class="exp-block">
-        <div class="exp-label">成长心路细节</div>
-        <div class="exp-text">${term.reflection}</div>
-      </div>
-      <div class="exp-block">
-        <div class="exp-label">节气成长结语</div>
-        <div class="exp-finale">${term.finale}</div>
-      </div>
-    </div>
-  `;
-  card.addEventListener('click', function(e) {
-    if (e.target.closest('.card-close')) return;
-    expandCard(this);
-  });
-  springTimeline.appendChild(card);
-});
-
-// ===== Render summer/autumn/winter cards (detailed format) =====
-['summer','autumn','winter'].forEach(season => {
-  const timeline = document.getElementById(`timeline-${season}`);
-  solarTerms[season].forEach((term, i) => {
-    const card = document.createElement('div');
-    card.className = `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+    `;
+  } else {
     card.innerHTML = `
       <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
       <div class="card-collapsed">
@@ -577,6 +615,64 @@ solarTerms.spring.forEach((term, i) => {
         </div>
       </div>
     `;
+  }
+  card.addEventListener('click', function(e) {
+    if (e.target.closest('.card-close')) return;
+    expandCard(this);
+  });
+  springTimeline.appendChild(card);
+});
+
+// ===== Render summer/autumn/winter cards (detailed format + stories) =====
+['summer','autumn','winter'].forEach(season => {
+  const timeline = document.getElementById(`timeline-${season}`);
+  solarTerms[season].forEach((term, i) => {
+    const isStory = term.type === 'story';
+    const card = document.createElement('div');
+    card.className = isStory ? `story-card ${i % 2 === 0 ? 'left' : 'right'}` : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+    if (isStory) {
+      card.innerHTML = `
+        <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
+        <div class="card-collapsed">
+          <span class="story-badge">成长故事</span>
+          <div class="card-name">${term.name}</div>
+          <div class="card-kernel">${term.kernel}</div>
+          <div class="card-expand-hint">点击展开阅读全文 ›</div>
+        </div>
+        <div class="card-expanded-body">
+          <div class="exp-title" style="color:#8b6914">${term.name}</div>
+          <div class="story-body">${term.body}</div>
+        </div>
+      `;
+    } else {
+      card.innerHTML = `
+        <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
+        <div class="card-collapsed">
+          <div class="card-name">${term.name}</div>
+          <div class="card-kernel">「${term.kernel}」</div>
+          <div class="card-expand-hint">点击展开 ›</div>
+        </div>
+        <div class="card-expanded-body">
+          <div class="exp-title">${term.title}</div>
+          <div class="exp-block">
+            <div class="exp-label">节气短句引言</div>
+            <div class="exp-quote">${term.intro}</div>
+          </div>
+          <div class="exp-block">
+            <div class="exp-label">个人成长纪实</div>
+            <div class="exp-text">${term.chronicle}</div>
+          </div>
+          <div class="exp-block">
+            <div class="exp-label">成长心路细节</div>
+            <div class="exp-text">${term.reflection}</div>
+          </div>
+          <div class="exp-block">
+            <div class="exp-label">节气成长结语</div>
+            <div class="exp-finale">${term.finale}</div>
+          </div>
+        </div>
+      `;
+    }
     card.addEventListener('click', function(e) {
       if (e.target.closest('.card-close')) return;
       expandCard(this);
