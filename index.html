@@ -154,43 +154,34 @@
   .term-card.expanded .card-close { display: flex; }
   .card-close:hover { background: #e0e0e0; color: #666; }
 
-  /* ===== Story Card (featured narrative) ===== */
+  /* ===== Story Card (always-visible narrative) ===== */
   .story-card {
-    position: relative; width: 44%; margin-bottom: 2rem;
+    width: 88%; margin: 0 auto 2.5rem;
     background: linear-gradient(135deg, #fefefe 0%, #faf8f5 100%);
-    border: 2px solid #e8e0d0; border-radius: 14px;
+    border: 2px solid #e0d6c0; border-radius: 14px;
     box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-    transition: transform 0.4s, box-shadow 0.4s;
     opacity: 0; transform: translateY(24px);
-    cursor: pointer;
+    transition: opacity 0.6s, transform 0.6s;
+    padding: 0;
   }
   .story-card.visible { opacity: 1; transform: translateY(0); }
-  .story-card:hover { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(0,0,0,0.12); }
-  .story-card.left { margin-right: auto; }
-  .story-card.right { margin-left: auto; }
-  .story-card::after {
-    content: '✦'; position: absolute; top: 24px;
-    font-size: 0.7rem; color: #c9a96e;
-    width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+  .story-card-inner { padding: 2rem; }
+  .story-header {
+    display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem; border-bottom: 1px solid #e8e0d0;
   }
-  .story-card.left::after { right: -30px; }
-  .story-card.right::after { left: -30px; }
+  .story-marker {
+    font-size: 1rem; color: #c9a96e; flex-shrink: 0;
+  }
   .story-badge {
     display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em;
     padding: 0.2rem 0.7rem; border-radius: 999px;
     background: linear-gradient(135deg, #f5e6d3, #ecd9bd); color: #b87333;
-    margin-bottom: 0.6rem;
   }
-  .story-card .card-collapsed { padding: 1.4rem 1.5rem; }
-  .story-card .card-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.2rem; color: #8b6914; }
-  .story-card .card-kernel { font-size: 0.82rem; color: #998866; font-style: italic; }
-  .story-card .card-expand-hint { font-size: 0.65rem; color: #bba880; letter-spacing: 0.1em; text-align: right; margin-top: 0.3rem; }
-  .story-card.expanded { cursor: default; box-shadow: 0 4px 28px rgba(0,0,0,0.14); }
-  .story-card .card-expanded-body { display: none; padding: 0 1.5rem 1.5rem; }
-  .story-card.expanded .card-expanded-body { display: block; }
-  .story-card.expanded .card-collapsed { padding-bottom: 0.5rem; border-bottom: 1px solid #f0ece0; margin-bottom: 0.5rem; }
-  .story-body { font-size: 0.9rem; color: #3d3628; line-height: 2; text-align: justify; }
-  .story-body p { margin-bottom: 1em; }
+  .story-card .story-name { font-size: 1.25rem; font-weight: 800; letter-spacing: 0.05em; color: #8b6914; }
+  .story-card .story-kernel { font-size: 0.85rem; color: #998866; font-style: italic; margin-bottom: 1.4rem; }
+  .story-body { font-size: 0.95rem; color: #3d3628; line-height: 2.1; text-align: justify; }
+  .story-body p { margin-bottom: 1em; text-indent: 0; }
   .story-body p:first-child::first-letter { font-size: 1.6em; font-weight: 700; color: #b87333; float: left; line-height: 0.85; margin-right: 0.12em; margin-top: 0.05em; }
 
   /* ===== Footer ===== */
@@ -208,6 +199,8 @@
     .timeline::before { left: 1.25rem; }
     .term-card { width: calc(100% - 3rem); margin-left: 3rem !important; margin-right: 0 !important; }
     .term-card.left::after, .term-card.right::after { left: -24px; right: auto; }
+    .story-card { width: 94%; margin: 0 auto 2rem; }
+    .story-card .story-card-inner { padding: 1.4rem; }
     .cover-title { font-size: 1.6rem; }
     .hero-seasons { gap: 0.75rem; } .hero-season { width: 40px; height: 40px; font-size: 1.1rem; }
   }
@@ -572,18 +565,16 @@ const springTimeline = document.getElementById('timeline-spring');
 solarTerms.spring.forEach((term, i) => {
   const isStory = term.type === 'story';
   const card = document.createElement('div');
-  card.className = isStory ? `story-card ${i % 2 === 0 ? 'left' : 'right'}` : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+  card.className = isStory ? 'story-card' : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
   if (isStory) {
     card.innerHTML = `
-      <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
-      <div class="card-collapsed">
-        <span class="story-badge">成长故事</span>
-        <div class="card-name">${term.name}</div>
-        <div class="card-kernel">${term.kernel}</div>
-        <div class="card-expand-hint">点击展开阅读全文 ›</div>
-      </div>
-      <div class="card-expanded-body">
-        <div class="exp-title" style="color:#8b6914">${term.name}</div>
+      <div class="story-card-inner">
+        <div class="story-header">
+          <span class="story-marker">✦</span>
+          <span class="story-badge">成长故事</span>
+        </div>
+        <div class="story-name">${term.name}</div>
+        <div class="story-kernel">${term.kernel}</div>
         <div class="story-body">${term.body}</div>
       </div>
     `;
@@ -616,10 +607,12 @@ solarTerms.spring.forEach((term, i) => {
       </div>
     `;
   }
-  card.addEventListener('click', function(e) {
-    if (e.target.closest('.card-close')) return;
-    expandCard(this);
-  });
+  if (!isStory) {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.card-close')) return;
+      expandCard(this);
+    });
+  }
   springTimeline.appendChild(card);
 });
 
@@ -629,18 +622,16 @@ solarTerms.spring.forEach((term, i) => {
   solarTerms[season].forEach((term, i) => {
     const isStory = term.type === 'story';
     const card = document.createElement('div');
-    card.className = isStory ? `story-card ${i % 2 === 0 ? 'left' : 'right'}` : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
+    card.className = isStory ? 'story-card' : `term-card ${i % 2 === 0 ? 'left' : 'right'}`;
     if (isStory) {
       card.innerHTML = `
-        <button class="card-close" onclick="event.stopPropagation(); collapseCard(this.parentElement)" title="收起">✕</button>
-        <div class="card-collapsed">
-          <span class="story-badge">成长故事</span>
-          <div class="card-name">${term.name}</div>
-          <div class="card-kernel">${term.kernel}</div>
-          <div class="card-expand-hint">点击展开阅读全文 ›</div>
-        </div>
-        <div class="card-expanded-body">
-          <div class="exp-title" style="color:#8b6914">${term.name}</div>
+        <div class="story-card-inner">
+          <div class="story-header">
+            <span class="story-marker">✦</span>
+            <span class="story-badge">成长故事</span>
+          </div>
+          <div class="story-name">${term.name}</div>
+          <div class="story-kernel">${term.kernel}</div>
           <div class="story-body">${term.body}</div>
         </div>
       `;
@@ -673,10 +664,12 @@ solarTerms.spring.forEach((term, i) => {
         </div>
       `;
     }
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.card-close')) return;
-      expandCard(this);
-    });
+    if (!isStory) {
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('.card-close')) return;
+        expandCard(this);
+      });
+    }
     timeline.appendChild(card);
   });
 });
@@ -707,7 +700,7 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-document.querySelectorAll('.term-card').forEach(card => observer.observe(card));
+document.querySelectorAll('.term-card, .story-card').forEach(card => observer.observe(card));
 </script>
 
 </body>
