@@ -219,16 +219,16 @@
   .season-photo img {
     width: 100%; height: auto; display: block; border-radius: 1px;
   }
-  .season-photo.right { right: 8%; top: 18%; transform: rotate(3deg); }
-  .season-photo.left  { left: 8%; top: 18%; transform: rotate(-3deg); }
+  .season-photo.right { right: 3%; bottom: 12%; transform: rotate(3deg); }
+  .season-photo.left  { left: 3%; bottom: 12%; transform: rotate(-3deg); }
   @keyframes float-photo {
     0%, 100% { transform: translateY(0) rotate(var(--r, 3deg)); }
     50% { transform: translateY(-14px) rotate(var(--r, 3deg)); }
   }
   @media (max-width: 700px) {
     .season-photo { width: 160px; padding: 6px 6px 18px 6px; }
-    .season-photo.right { right: 4%; top: 10%; }
-    .season-photo.left  { left: 4%; top: 10%; }
+    .season-photo.right { right: 2%; bottom: 8%; }
+    .season-photo.left  { left: 2%; bottom: 8%; }
     @keyframes float-photo {
       0%, 100% { transform: translateY(0) rotate(var(--r, 3deg)); }
       50% { transform: translateY(-8px) rotate(var(--r, 3deg)); }
